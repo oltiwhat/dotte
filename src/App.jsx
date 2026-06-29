@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import './index.css'
 
 const menuItems = [
@@ -129,7 +130,7 @@ function Hero() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-latte/50 mb-8">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-sm font-medium text-mocha/80">Open 7 AM – 12 AM daily</span>
+          <span className="text-sm font-medium text-mocha/80">Open now · See hours below</span>
         </div>
         <h1 className="text-6xl md:text-8xl font-bold text-espresso mb-6 leading-tight">
           Dotte<span className="text-caramel">.</span>
@@ -141,7 +142,6 @@ function Hero() {
           <div className="flex items-center gap-2">
             <StarRating rating={5} />
             <span className="text-lg font-semibold text-espresso">4.7</span>
-            <span className="text-mocha/60">(69 reviews)</span>
           </div>
           <div className="w-px h-6 bg-latte hidden md:block" />
           <div className="flex items-center gap-2 text-mocha/70">
@@ -156,7 +156,6 @@ function Hero() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="text-sm font-medium">€5 – €10 per person</span>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-4">
@@ -195,7 +194,7 @@ function About() {
               {[
                 { label: 'Reviews', value: '4.7/5' },
                 { label: 'Total Reviews', value: '69' },
-                { label: 'Price Range', value: '€5-10' },
+                
               ].map((stat, i) => (
                 <div key={i} className="p-4 bg-cream rounded-2xl text-center">
                   <div className="text-2xl font-bold text-espresso">{stat.value}</div>
@@ -222,6 +221,7 @@ function Menu() {
   const categories = ['All', 'Breakfast Bowls', 'Egg & Protein', 'Toast', 'Brioche', 'Pancakes', 'Salads', 'Bowls & Pasta', 'Sandwiches', 'Wraps', 'Burgers', 'Desserts', 'Drinks']
 
   const filtered = activeCategory === 'All' ? menuItems : menuItems.filter(item => item.category === activeCategory)
+  const visibleItems = filtered.slice(0, 8)
 
   return (
     <section id="menu" className="py-24 bg-cream/50">
@@ -247,7 +247,7 @@ function Menu() {
           ))}
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filtered.map((item, i) => (
+          {visibleItems.map((item, i) => (
             <div key={i} className="group bg-white rounded-2xl border border-latte/50 hover:border-caramel/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
               <div className="aspect-[4/3] bg-cream relative overflow-hidden">
                 <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -264,6 +264,27 @@ function Menu() {
             </div>
           ))}
         </div>
+        {filtered.length > 8 && (
+          <div className="flex justify-center mt-12">
+            <a
+              href="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex flex-col items-center bg-white rounded-2xl p-6 border border-latte/50 hover:border-caramel/50 hover:shadow-xl transition-all"
+            >
+              <QRCodeSVG
+                value="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
+                size={140}
+                bgColor="#FFFFFF"
+                fgColor="#1E3A6E"
+                level="M"
+                includeMargin={false}
+              />
+              <span className="mt-4 text-sm font-medium text-espresso">Scan for full menu</span>
+              <span className="text-xs text-mocha/50 mt-1">Opens on Wolt</span>
+            </a>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -349,11 +370,16 @@ function Amenities() {
             </div>
           ))}
         </div>
-        <div className="mt-16 grid md:grid-cols-2 gap-8">
+        <div className="mt-16 grid md:grid-cols-3 gap-8">
           <div className="text-center p-8 rounded-3xl bg-cream/30">
-            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Every Day</div>
-            <div className="text-2xl font-bold text-espresso mb-2">07:00 – 00:00</div>
-            <div className="text-mocha/60">Open from 7 AM to Midnight</div>
+            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Mon–Fri</div>
+            <div className="text-2xl font-bold text-espresso mb-2">09:00–22:00</div>
+            <div className="text-mocha/60">Lunch & Dinner</div>
+          </div>
+          <div className="text-center p-8 rounded-3xl bg-cream/30">
+            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Sat–Sun</div>
+            <div className="text-2xl font-bold text-espresso mb-2">11:00–19:00</div>
+            <div className="text-mocha/60">Brunch & More</div>
           </div>
           <div className="text-center p-8 rounded-3xl bg-cream/30">
             <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Location</div>
@@ -457,7 +483,7 @@ function Footer() {
             <a href="https://wolt.com/sq/xkx/pristina/restaurant/dotte" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-caramel transition-colors">Wolt</a>
           </div>
           <div className="text-sm">
-            © 2026 Dotte. All rights reserved.
+            © 2025 Dotte. All rights reserved.
           </div>
         </div>
       </div>
