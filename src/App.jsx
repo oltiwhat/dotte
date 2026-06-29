@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import './index.css'
 
@@ -58,6 +58,46 @@ const reviews = [
   { text: "This is my go-to spot in Prishtina, I have my morning coffee here almost every day.", author: "M. D.", rating: 5 },
   { text: "The tiramisu is always fresh, clearly made with high-quality ingredients.", author: "J. P.", rating: 5 },
 ]
+
+function AnimatedCounter({ end, suffix = '', duration = 2000 }) {
+  const [count, setCount] = useState(0)
+  const [inView, setInView] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!inView) return
+    let start = 0
+    const startTime = performance.now()
+    const step = (currentTime) => {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.floor(eased * end))
+      if (progress < 1) {
+        requestAnimationFrame(step)
+      } else {
+        setCount(end)
+      }
+    }
+    requestAnimationFrame(step)
+  }, [inView, end, duration])
+
+  return <span ref={ref}>{count}{suffix}</span>
+}
 
 function StarRating({ rating }) {
   return (
@@ -192,12 +232,14 @@ function About() {
             </p>
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: 'Reviews', value: '4.7/5' },
-                { label: 'Total Reviews', value: '69' },
-                
+                { label: 'Reviews', value: 4.7, suffix: '/5', decimals: 1 },
+                { label: 'Total Reviews', value: 69, suffix: '' },
+                { label: 'Happy Guests', value: 99, suffix: '%' },
               ].map((stat, i) => (
                 <div key={i} className="p-4 bg-cream rounded-2xl text-center">
-                  <div className="text-2xl font-bold text-espresso">{stat.value}</div>
+                  <div className="text-2xl font-bold text-espresso">
+                    <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                  </div>
                   <div className="text-xs text-mocha/60 mt-1 uppercase tracking-wider">{stat.label}</div>
                 </div>
               ))}
@@ -370,16 +412,11 @@ function Amenities() {
             </div>
           ))}
         </div>
-        <div className="mt-16 grid md:grid-cols-3 gap-8">
+        <div className="mt-16 grid md:grid-cols-2 gap-8">
           <div className="text-center p-8 rounded-3xl bg-cream/30">
-            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Mon–Fri</div>
-            <div className="text-2xl font-bold text-espresso mb-2">09:00–22:00</div>
-            <div className="text-mocha/60">Lunch & Dinner</div>
-          </div>
-          <div className="text-center p-8 rounded-3xl bg-cream/30">
-            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Sat–Sun</div>
-            <div className="text-2xl font-bold text-espresso mb-2">11:00–19:00</div>
-            <div className="text-mocha/60">Brunch & More</div>
+            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Every Day</div>
+            <div className="text-2xl font-bold text-espresso mb-2">07:00 – 00:00</div>
+            <div className="text-mocha/60">Open from 7 AM to Midnight</div>
           </div>
           <div className="text-center p-8 rounded-3xl bg-cream/30">
             <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Location</div>
@@ -392,14 +429,60 @@ function Amenities() {
   )
 }
 
+function Music() {
+  const playlist = [
+    { title: 'Morning Coffee Vibes', emoji: '☕' },
+    { title: 'Sunset Cocktails', emoji: '🍹' },
+    { title: 'Weekend Brunch', emoji: '🥞' },
+    { title: 'Late Night Jazz', emoji: '🎷' },
+  ]
+
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Dotte Vibes</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">The Soundtrack</h2>
+          <p className="text-mocha/60 mt-4 max-w-xl mx-auto">Our carefully curated playlist — the perfect backdrop for great food and company.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {playlist.map((track, i) => (
+            <div key={i} className="group bg-cream/50 rounded-2xl p-6 hover:bg-cream transition-colors border border-latte/30 hover:border-caramel/50">
+              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">{track.emoji}</div>
+              <div className="font-medium text-espresso">{track.title}</div>
+              <div className="text-xs text-mocha/50 mt-1">Now Playing</div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center">
+          <div className="inline-flex flex-col items-center bg-cream/30 rounded-2xl p-8 border border-latte/50">
+            <QRCodeSVG
+              value="https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO"
+              size={140}
+              bgColor="#FFFFFF"
+              fgColor="#1E3A6E"
+              level="M"
+              includeMargin={false}
+            />
+            <span className="mt-4 text-sm font-medium text-espresso">Scan to listen</span>
+            <span className="text-xs text-mocha/50 mt-1">Spotify playlist</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Gallery() {
   const items = [
-    { image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25ce', label: 'Spicy Honey Chicken Rice Bowl' },
-    { image: 'https://imageproxy.wolt.com/assets/692438dd62c0f58ea1cb25b3', label: 'Greek Yogurt & Granola' },
-    { image: 'https://imageproxy.wolt.com/assets/692438e762c0f58ea1cb25c8', label: 'Chicken & Avocado Pasta' },
-    { image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25cf', label: 'Tiramisu' },
-    { image: 'https://imageproxy.wolt.com/assets/692438e462c0f58ea1cb25c2', label: 'Caesar Salad' },
-    { image: 'https://imageproxy.wolt.com/assets/692438d762c0f58ea1cb25a3', label: 'Protein Choco Stack' },
+    { image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25ce', label: 'Spicy Honey Chicken Rice Bowl', aspect: 'md:col-span-2 md:row-span-2' },
+    { image: 'https://imageproxy.wolt.com/assets/692438dd62c0f58ea1cb25b3', label: 'Greek Yogurt & Granola', aspect: '' },
+    { image: 'https://imageproxy.wolt.com/assets/692438e762c0f58ea1cb25c8', label: 'Chicken & Avocado Pasta', aspect: 'md:row-span-2' },
+    { image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25cf', label: 'Tiramisu', aspect: '' },
+    { image: 'https://imageproxy.wolt.com/assets/692438e462c0f58ea1cb25c2', label: 'Caesar Salad', aspect: 'md:col-span-2' },
+    { image: 'https://imageproxy.wolt.com/assets/692438d762c0f58ea1cb25a3', label: 'Protein Choco Stack', aspect: '' },
+    { image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25cd', label: 'Sandwich Crunch', aspect: '' },
+    { image: 'https://imageproxy.wolt.com/assets/692438e062c0f58ea1cb25b8', label: 'Rise & Shine Plate', aspect: '' },
   ]
 
   return (
@@ -409,16 +492,16 @@ function Gallery() {
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Gallery</span>
           <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">Food & Atmosphere</h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[120px]">
           {items.map((item, i) => (
             <div
               key={i}
-              className={`aspect-square rounded-3xl overflow-hidden relative group ${i % 3 === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+              className={`rounded-3xl overflow-hidden relative group ${item.aspect}`}
             >
               <img src={item.image} alt={item.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="text-sm font-medium">{item.label}</div>
+              <div className="absolute bottom-3 left-3 right-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="text-xs font-medium leading-tight">{item.label}</div>
               </div>
             </div>
           ))}
@@ -453,6 +536,30 @@ function Contact() {
             </a>
           ))}
         </div>
+        <div className="rounded-2xl overflow-hidden mb-12 border border-warm-white/10 shadow-2xl">
+          <iframe
+            title="Dotte location"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2933.5!2d21.1782969!3d42.6545375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDLCsDM0JzIzLjYiTiAyMsKwMTUnMjQuNCJF!5e0!3m2!1sen!2s!4v1"
+            width="100%"
+            height="250"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <a
+          href="https://maps.google.com/?q=42.6545375,21.1782969"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-warm-white rounded-full font-medium hover:bg-white/20 transition-colors mb-6"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+          Get Directions
+        </a>
+        <br />
         <a
           href="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
           target="_blank"
@@ -491,18 +598,38 @@ function Footer() {
   )
 }
 
+function StickyMobileBar() {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-espresso/95 backdrop-blur-md border-t border-latte/30 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
+      <a
+        href="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full bg-caramel text-espresso font-bold py-3 rounded-full hover:bg-caramel/90 transition-colors"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+        Order on Wolt
+      </a>
+    </div>
+  )
+}
+
 function App() {
   return (
-    <div className="antialiased">
+    <div className="antialiased pb-16 md:pb-0">
       <Navbar />
       <Hero />
       <About />
       <Menu />
       <Reviews />
       <Gallery />
+      <Music />
       <Amenities />
       <Contact />
       <Footer />
+      <StickyMobileBar />
     </div>
   )
 }
