@@ -99,6 +99,31 @@ function AnimatedCounter({ end, suffix = '', duration = 2000 }) {
   return <span ref={ref}>{count}{suffix}</span>
 }
 
+function FadeIn({ children, className = '', delay = 0 }) {
+  const [inView, setInView] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setInView(true), delay)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [delay])
+
+  return (
+    <div ref={ref} className={`fade-in ${inView ? 'visible' : ''} ${className}`}>
+      {children}
+    </div>
+  )
+}
+
 function StarRating({ rating }) {
   return (
     <div className="flex gap-1">
@@ -256,6 +281,44 @@ function About() {
             </div>
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-sage/30 rounded-2xl -z-10" />
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-caramel/20 rounded-full -z-10" />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function TodaysSpecial() {
+  const special = { name: 'Spicy Honey Chicken Rice Bowl 🌶', category: 'Most Popular', price: '€7.20', image: 'https://imageproxy.wolt.com/assets/692438ea62c0f58ea1cb25ce' }
+  return (
+    <section className="py-24 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Chef's Pick</span>
+          <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3">Today's Special</h2>
+        </div>
+        <div className="max-w-3xl mx-auto">
+          <div className="group bg-gradient-to-br from-cream to-latte/30 rounded-3xl p-8 md:p-12 border border-latte/50 hover:border-caramel/50 hover:shadow-2xl transition-all duration-500">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg shimmer">
+                <img src={special.image} alt={special.name} className="w-full h-full object-cover relative z-10" onLoad={(e) => e.target.parentElement.classList.remove('shimmer')} />
+              </div>
+              <div>
+                <div className="inline-block px-3 py-1 bg-caramel/20 text-caramel text-xs font-semibold rounded-full mb-4">MOST ORDERED</div>
+                <h3 className="text-3xl font-display text-espresso mb-2">{special.name}</h3>
+                <p className="text-mocha/60 mb-6">{special.category} — the crowd favorite that keeps our guests coming back.</p>
+                <div className="flex items-center gap-4 mb-6">
+                  <span className="text-3xl font-display text-caramel">{special.price}</span>
+                  <StarRating rating={5} />
+                </div>
+                <a href="https://wolt.com/sq/xkx/pristina/restaurant/dotte" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-8 py-4 bg-espresso text-warm-white rounded-full font-semibold hover:bg-mocha transition-all hover:scale-105 shadow-lg">
+                  Order Now
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -661,14 +724,15 @@ function App() {
   return (
     <div className="antialiased pb-16 md:pb-0">
       <Navbar />
-      <Hero />
-      <About />
-      <Menu />
-      <Reviews />
-      <Gallery />
-      <Music />
-      <Amenities />
-      <Contact />
+      <FadeIn><Hero /></FadeIn>
+      <FadeIn><TodaysSpecial /></FadeIn>
+      <FadeIn><About /></FadeIn>
+      <FadeIn><Menu /></FadeIn>
+      <FadeIn><Reviews /></FadeIn>
+      <FadeIn><Gallery /></FadeIn>
+      <FadeIn><Music /></FadeIn>
+      <FadeIn><Amenities /></FadeIn>
+      <FadeIn><Contact /></FadeIn>
       <Footer />
       <StickyMobileBar />
       <ScrollToTop />
