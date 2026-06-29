@@ -658,19 +658,77 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="bg-mocha text-warm-white/60 py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-2xl font-display text-warm-white">
-            Dotte<span className="text-caramel">.</span>
+    <footer className="bg-mocha text-warm-white/60 py-16 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-caramel rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-latte rounded-full blur-3xl" />
+      </div>
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid md:grid-cols-12 gap-12 mb-12">
+          <div className="md:col-span-5">
+            <div className="text-4xl font-display text-warm-white mb-4">
+              Dotte<span className="text-caramel">.</span>
+            </div>
+            <p className="text-warm-white/50 max-w-sm leading-relaxed">
+              Contemporary food and carefully prepared dishes in the heart of Prishtina. Great coffee, fresh food, and the best vibes in town.
+            </p>
+            <div className="flex items-center gap-4 mt-6">
+              {[
+                { href: 'https://www.instagram.com/dotte.pri/', label: 'Instagram', svg: <><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="2"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="none" stroke="currentColor" strokeWidth="2"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></> },
+                { href: '#', label: 'Facebook', svg: <><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></> },
+                { href: 'https://wolt.com/sq/xkx/pristina/restaurant/dotte', label: 'Wolt', svg: <><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2"/><path d="M8 12l3 3 5-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></> },
+              ].map(link => (
+                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.label} className="w-10 h-10 rounded-full bg-warm-white/10 border border-warm-white/10 flex items-center justify-center hover:bg-caramel hover:border-caramel hover:text-espresso transition-all">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">{link.svg}</svg>
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-6">
-            <a href="https://www.instagram.com/dotte.pri/" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-caramel transition-colors">Instagram</a>
-            <a href="#" className="text-sm hover:text-caramel transition-colors">Facebook</a>
-            <a href="https://wolt.com/sq/xkx/pristina/restaurant/dotte" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-caramel transition-colors">Wolt</a>
+          <div className="md:col-span-3 md:col-start-7">
+            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-4">Visit Us</div>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-3">
+                <svg className="w-4 h-4 mt-0.5 text-caramel" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>M53H+R87, Prishtina</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <svg className="w-4 h-4 mt-0.5 text-caramel" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Every day 07:00 – 00:00</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <svg className="w-4 h-4 mt-0.5 text-caramel" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <a href="tel:+38349400070" className="hover:text-warm-white transition-colors">+383 49 400 070</a>
+              </div>
+            </div>
           </div>
-          <div className="text-sm">
+          <div className="md:col-span-3">
+            <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-4">Links</div>
+            <div className="space-y-3 text-sm">
+              {['Menu', 'Reviews', 'About', 'Contact'].map(link => (
+                <a key={link} href={`#${link.toLowerCase()}`} className="block hover:text-warm-white transition-colors">{link}</a>
+              ))}
+              <a href="https://wolt.com/sq/xkx/pristina/restaurant/dotte" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-warm-white/10 rounded-full hover:bg-caramel hover:text-espresso transition-all text-xs font-medium">
+                Order on Wolt
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-warm-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-xs text-warm-white/40">
             © 2025 Dotte. All rights reserved.
+          </div>
+          <div className="text-xs text-warm-white/40">
+            Made with ❤️ in Prishtina
           </div>
         </div>
       </div>
