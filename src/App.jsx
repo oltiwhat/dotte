@@ -124,7 +124,7 @@ function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-warm-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="#" className="text-2xl font-bold text-espresso tracking-tight">
+        <a href="#" className="text-2xl font-display text-espresso tracking-tight">
           Dotte<span className="text-caramel">.</span>
         </a>
         <div className="hidden md:flex items-center gap-8">
@@ -172,7 +172,7 @@ function Hero() {
           <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           <span className="text-sm font-medium text-mocha/80">Open now · See hours below</span>
         </div>
-        <h1 className="text-6xl md:text-8xl font-bold text-espresso mb-6 leading-tight">
+        <h1 className="text-6xl md:text-8xl font-display text-espresso mb-6 leading-tight">
           Dotte<span className="text-caramel">.</span>
         </h1>
         <p className="text-xl md:text-2xl text-mocha/70 mb-8 max-w-2xl mx-auto font-light">
@@ -223,7 +223,7 @@ function About() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="text-sm font-semibold text-caramel uppercase tracking-wider">About Dotte</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3 mb-6">A hidden gem with an unbeatable vibe</h2>
+            <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3 mb-6">A hidden gem with an unbeatable vibe</h2>
             <p className="text-lg text-mocha/70 mb-6 leading-relaxed">
               Dotte is the perfect mix of vibrant energy and relaxing charm. With a modern yet cozy atmosphere, it's ideal for both casual meals and night outs with friends.
             </p>
@@ -237,7 +237,7 @@ function About() {
                 { label: 'Happy Guests', value: 99, suffix: '%' },
               ].map((stat, i) => (
                 <div key={i} className="p-4 bg-cream rounded-2xl text-center">
-                  <div className="text-2xl font-bold text-espresso">
+                  <div className="text-2xl font-display text-espresso">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </div>
                   <div className="text-xs text-mocha/60 mt-1 uppercase tracking-wider">{stat.label}</div>
@@ -246,8 +246,13 @@ function About() {
             </div>
           </div>
           <div className="relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
-              <img src="https://imageproxy.wolt.com/assets/6927073f4be0f0d2140ec4c4" alt="Dotte cafe interior" className="w-full h-full object-cover" />
+            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl shimmer">
+              <img
+                src="https://imageproxy.wolt.com/assets/6927073f4be0f0d2140ec4c4"
+                alt="Dotte cafe interior"
+                className="w-full h-full object-cover relative z-10"
+                onLoad={(e) => e.target.parentElement.classList.remove('shimmer')}
+              />
             </div>
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-sage/30 rounded-2xl -z-10" />
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-caramel/20 rounded-full -z-10" />
@@ -270,7 +275,7 @@ function Menu() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Our Offerings</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">Menu Highlights</h2>
+          <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3">Menu Highlights</h2>
           <p className="text-mocha/60 mt-4 max-w-xl mx-auto">Fresh, flavorful, and made with love. Discover what makes Dotte special.</p>
         </div>
         <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -291,15 +296,21 @@ function Menu() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {visibleItems.map((item, i) => (
             <div key={i} className="group bg-white rounded-2xl border border-latte/50 hover:border-caramel/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-              <div className="aspect-[4/3] bg-cream relative overflow-hidden">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="aspect-[4/3] bg-cream relative overflow-hidden shimmer">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 relative z-10"
+                  onLoad={(e) => e.target.parentElement.classList.remove('shimmer')}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="p-5">
                 <h3 className="font-semibold text-espresso mb-1 leading-tight">{item.name}</h3>
                 <p className="text-xs text-mocha/50 uppercase tracking-wider mb-3">{item.category}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-caramel">{item.price}</span>
+                  <span className="text-lg font-display text-caramel">{item.price}</span>
                   <span className="text-xs text-mocha/40">Must try</span>
                 </div>
               </div>
@@ -349,7 +360,7 @@ function Reviews() {
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Testimonials</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-3">What our guests say</h2>
+          <h2 className="text-4xl md:text-5xl font-display mt-3">What our guests say</h2>
         </div>
         <div className="relative">
           <div className="overflow-hidden">
@@ -362,7 +373,7 @@ function Reviews() {
                     </div>
                     <p className="text-xl md:text-2xl text-center leading-relaxed mb-8 font-light">"{review.text}"</p>
                     <div className="flex items-center justify-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-caramel/20 flex items-center justify-center text-lg font-bold text-caramel">
+                      <div className="w-12 h-12 rounded-full bg-caramel/20 flex items-center justify-center text-lg font-display text-caramel">
                         {review.author.charAt(0)}
                       </div>
                       <span className="font-medium">{review.author}</span>
@@ -402,7 +413,7 @@ function Amenities() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Amenities</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">Everything you need</h2>
+          <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3">Everything you need</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {amenities.map((item, i) => (
@@ -415,12 +426,12 @@ function Amenities() {
         <div className="mt-16 grid md:grid-cols-2 gap-8">
           <div className="text-center p-8 rounded-3xl bg-cream/30">
             <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Every Day</div>
-            <div className="text-2xl font-bold text-espresso mb-2">07:00 – 00:00</div>
+            <div className="text-2xl font-display text-espresso mb-2">07:00 – 00:00</div>
             <div className="text-mocha/60">Open from 7 AM to Midnight</div>
           </div>
           <div className="text-center p-8 rounded-3xl bg-cream/30">
             <div className="text-sm font-semibold text-caramel uppercase tracking-wider mb-2">Location</div>
-            <div className="text-2xl font-bold text-espresso mb-2">Prishtina</div>
+            <div className="text-2xl font-display text-espresso mb-2">Prishtina</div>
             <a href="https://maps.google.com/?q=42.6545375,21.1782969" target="_blank" rel="noopener noreferrer" className="text-sm text-caramel hover:underline">View on Maps</a>
           </div>
         </div>
@@ -442,7 +453,7 @@ function Music() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Dotte Vibes</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">The Soundtrack</h2>
+          <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3">The Soundtrack</h2>
           <p className="text-mocha/60 mt-4 max-w-xl mx-auto">Our carefully curated playlist — the perfect backdrop for great food and company.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -490,15 +501,21 @@ function Gallery() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Gallery</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-espresso mt-3">Food & Atmosphere</h2>
+          <h2 className="text-4xl md:text-5xl font-display text-espresso mt-3">Food & Atmosphere</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[120px]">
           {items.map((item, i) => (
             <div
               key={i}
-              className={`rounded-3xl overflow-hidden relative group ${item.aspect}`}
+              className={`rounded-3xl overflow-hidden relative group shimmer ${item.aspect}`}
             >
-              <img src={item.image} alt={item.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img
+                src={item.image}
+                alt={item.label}
+                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 relative z-10"
+                onLoad={(e) => e.target.parentElement.classList.remove('shimmer')}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="absolute bottom-3 left-3 right-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="text-xs font-medium leading-tight">{item.label}</div>
@@ -519,7 +536,7 @@ function Contact() {
       </div>
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <span className="text-sm font-semibold text-caramel uppercase tracking-wider">Visit Us</span>
-        <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-6">Come experience Dotte</h2>
+        <h2 className="text-4xl md:text-5xl font-display mt-3 mb-6">Come experience Dotte</h2>
         <p className="text-lg text-warm-white/70 mb-12 max-w-xl mx-auto">
           Whether you're here for your morning coffee, a relaxed lunch, or an evening with cocktails and friends — we've got a seat for you.
         </p>
@@ -564,7 +581,7 @@ function Contact() {
           href="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 px-10 py-5 bg-caramel text-espresso rounded-full font-bold text-lg hover:bg-caramel/90 transition-all hover:scale-105 shadow-2xl shadow-caramel/20"
+          className="inline-flex items-center gap-3 px-10 py-5 bg-caramel text-espresso rounded-full font-display text-lg hover:bg-caramel/90 transition-all hover:scale-105 shadow-2xl shadow-caramel/20"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -581,7 +598,7 @@ function Footer() {
     <footer className="bg-mocha text-warm-white/60 py-12">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-2xl font-bold text-warm-white">
+          <div className="text-2xl font-display text-warm-white">
             Dotte<span className="text-caramel">.</span>
           </div>
           <div className="flex items-center gap-6">
@@ -605,7 +622,7 @@ function StickyMobileBar() {
         href="https://wolt.com/sq/xkx/pristina/restaurant/dotte"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 w-full bg-caramel text-espresso font-bold py-3 rounded-full hover:bg-caramel/90 transition-colors"
+        className="flex items-center justify-center gap-2 w-full bg-caramel text-espresso font-display py-3 rounded-full hover:bg-caramel/90 transition-colors"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -613,6 +630,30 @@ function StickyMobileBar() {
         Order on Wolt
       </a>
     </div>
+  )
+}
+
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setVisible(window.scrollY > 500)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className="fixed bottom-20 right-6 z-40 w-12 h-12 bg-espresso text-warm-white rounded-full shadow-lg hover:bg-mocha transition-all hover:scale-110 flex items-center justify-center"
+      aria-label="Scroll to top"
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
   )
 }
 
@@ -630,6 +671,7 @@ function App() {
       <Contact />
       <Footer />
       <StickyMobileBar />
+      <ScrollToTop />
     </div>
   )
 }
